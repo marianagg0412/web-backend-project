@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Event } from "src/events/entities/event.entity";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Product {
@@ -19,4 +20,7 @@ export class Product {
 
     @Column({ nullable: true })
     imageUrl: string;
+
+    @ManyToMany(() => Event, (event) => event.products)
+    events: Event[];
 }

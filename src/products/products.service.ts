@@ -8,27 +8,29 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class ProductsService {
   constructor(
-    @InjectRepository(Event)
-    private eventRepository: Repository<Product>,
+    @InjectRepository(Product)
+    private productRepository: Repository<Product>,
   ) { }
 
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  async create(createProductDto: CreateProductDto): Promise<Product> {
+    const product = this.productRepository.create(createProductDto);
+    return await this.productRepository.save(product);
   }
 
-  findAll() {
-    return `This action returns all products`;
+  async findAll(): Promise<Product[]> {
+    return await this.productRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number) {
+    return await this.productRepository.findOne({where: {id}});
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    await this.productRepository.update(id, updateProductDto);
+    return this.productRepository.findOne({where: {id}});
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+    await this.productRepository.delete(id);
   }
 }

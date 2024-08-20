@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateModelDto } from './dto/create-model.dto';
 import { UpdateModelDto } from './dto/update-model.dto';
 import { Model } from './entities/model.entity';
@@ -8,27 +8,32 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class ModelsService {
   constructor(
-    @InjectRepository(Event)
-    private eventRepository: Repository<Model>,
+    @InjectRepository(Model)
+    private modelRepository: Repository<Model>,
   ) { }
 
-  create(createModelDto: CreateModelDto) {
-    return 'This action adds a new model';
+  async create(createModelDto: CreateModelDto): Promise<Model> {
+    const model = this.modelRepository.create(createModelDto);
+    return await this.modelRepository.save(model);
   }
 
-  findAll() {
-    return `This action returns all models`;
+  async findAll(): Promise<Model[]> {
+    return await this.modelRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} model`;
+  async findOne(id: number): Promise<Model> {
+    const model = await this.modelRepository.findOne({where: {id}});
+    if(!model) {
+      throw new NotFoundException('Model not found');
+    }
+    return model;
   }
 
-  update(id: number, updateModelDto: UpdateModelDto) {
-    return `This action updates a #${id} model`;
+  async update(id: number, updateModelDto: UpdateModelDto) {
+    await this.modelRepository.update(id, updateModelDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} model`;
+  async remove(id: number) {
+    await this.modelRepository.delete(id);
   }
 }
