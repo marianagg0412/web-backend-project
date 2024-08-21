@@ -30,7 +30,9 @@ export class ModelsService {
   }
 
   async update(id: number, updateModelDto: UpdateModelDto) {
-    await this.modelRepository.update(id, updateModelDto);
+    const model = await this.findOne(id); 
+    const updatedModel = Object.assign(model, updateModelDto);
+    return await this.modelRepository.save(updatedModel);
   }
 
   async remove(id: number) {

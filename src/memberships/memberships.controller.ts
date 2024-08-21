@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { MembershipsService } from './memberships.service';
 import { CreateMembershipDto } from './dto/create-membership.dto';
 import { UpdateMembershipDto } from './dto/update-membership.dto';
@@ -18,17 +18,17 @@ export class MembershipsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.membershipsService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.membershipsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMembershipDto: UpdateMembershipDto) {
-    return this.membershipsService.update(+id, updateMembershipDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateMembershipDto: UpdateMembershipDto) {
+    return this.membershipsService.update(id, updateMembershipDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.membershipsService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.membershipsService.remove(id);
   }
 }

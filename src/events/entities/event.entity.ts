@@ -1,8 +1,10 @@
-import { Model } from "src/models/entities/model.entity";
-import { Product } from "src/products/entities/product.entity";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
+import { EventModel } from "src/eventxmodel/entities/eventxmodel.entity";
+import { EventProduct } from "src/eventxproduct/entities/eventxproduct.entity";
+import { Photo } from "src/photos/entities/photo.entity";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany } from "typeorm";
+import { User } from '../../users/entities/user.entity'; // Import the User entity
 
-@Entity()
+@Entity({ name: 'event' })
 export class Event {
   @PrimaryGeneratedColumn()
   id: number;
@@ -22,11 +24,16 @@ export class Event {
   @Column({ nullable: true })
   imagesUrl: string;
 
-  @ManyToMany(() => Model)
-  @JoinTable()
-  models: Model[];
+  @OneToMany(() => EventModel, (eventModel) => eventModel.event)
+  eventModels: EventModel[];
 
-  @ManyToMany(() => Product)
-  @JoinTable() // This will create a junction table for the many-to-many relationship
-  products: Product[];
+  @OneToMany(() => EventProduct, (eventProduct) => eventProduct.event)
+  eventProducts: EventProduct[];
+
+  @OneToMany(() => Photo, (photo) => photo.event)
+  photos: Photo[];
+
+  // New Many-to-Many relationship with User
+  @ManyToMany(() => User, user => user.events)
+  users: User[];
 }

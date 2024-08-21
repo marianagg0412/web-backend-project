@@ -1,7 +1,7 @@
-import { Event } from "src/events/entities/event.entity";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { EventProduct } from "src/eventxproduct/entities/eventxproduct.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity({ name: 'product' })
 export class Product {
     @PrimaryGeneratedColumn()
     id: number;
@@ -21,6 +21,6 @@ export class Product {
     @Column({ nullable: true })
     imageUrl: string;
 
-    @ManyToMany(() => Event, (event) => event.products)
-    events: Event[];
+    @OneToMany(() => EventProduct, (eventProduct) => eventProduct.product)
+    eventProducts: EventProduct[];
 }

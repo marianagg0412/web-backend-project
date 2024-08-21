@@ -1,6 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { EventModel } from 'src/eventxmodel/entities/eventxmodel.entity';
+import { Photo } from 'src/photos/entities/photo.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'model' })
 export class Model {
   @PrimaryGeneratedColumn()
   id: number;
@@ -16,4 +18,10 @@ export class Model {
 
   @Column({ nullable: true })
   photosUrl: string;
+
+  @OneToMany(() => EventModel, (eventModel) => eventModel.model)
+  eventModels: EventModel[];
+
+  @OneToMany(() => Photo, (photo) => photo.model)
+  photos: Photo[];
 }

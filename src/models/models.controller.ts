@@ -25,7 +25,7 @@ export class ModelsController {
   @Patch(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateModelDto: UpdateModelDto) {
     return await this.modelsService.update(+id, updateModelDto);
-  }
+  } 
 
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
