@@ -1,8 +1,8 @@
-import { EventModel } from "src/eventxmodel/entities/eventxmodel.entity";
-import { EventProduct } from "src/eventxproduct/entities/eventxproduct.entity";
-import { Photo } from "src/photos/entities/photo.entity";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany } from "typeorm";
-import { User } from '../../users/entities/user.entity'; // Import the User entity
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, OneToMany } from 'typeorm';
+import { User } from '../../users/entities/user.entity';
+import { Product } from '../../products/entities/product.entity';
+import { Model } from '../../models/entities/model.entity';
+import { Photo } from '../../photos/entities/photo.entity';
 
 @Entity({ name: 'event' })
 export class Event {
@@ -12,28 +12,27 @@ export class Event {
   @Column()
   name: string;
 
-  @Column('date')
+  @Column()
   date: Date;
 
-  @Column({ nullable: true })
+  @Column()
   location: string;
 
-  @Column({ nullable: true })
+  @Column()
   description: string;
 
-  @Column({ nullable: true })
+  @Column()
   imagesUrl: string;
 
-  @OneToMany(() => EventModel, (eventModel) => eventModel.event)
-  eventModels: EventModel[];
-
-  @OneToMany(() => EventProduct, (eventProduct) => eventProduct.event)
-  eventProducts: EventProduct[];
-
-  @OneToMany(() => Photo, (photo) => photo.event)
-  photos: Photo[];
-
-  // New Many-to-Many relationship with User
   @ManyToMany(() => User, user => user.events)
   users: User[];
+
+  @OneToMany(() => Product, product => product.event)
+  products: Product[];
+
+  @OneToMany(() => Model, model => model.event)
+  models: Model[];
+
+  @OneToMany(() => Photo, photo => photo.event)
+  photos: Photo[];
 }

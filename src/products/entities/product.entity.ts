@@ -1,26 +1,27 @@
-import { EventProduct } from "src/eventxproduct/entities/eventxproduct.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Event } from '../../events/entities/event.entity';
 
 @Entity({ name: 'product' })
 export class Product {
-    @PrimaryGeneratedColumn()
-    id: number;
-    
-    @Column()
-    name: string;
-    
-    @Column('decimal')
-    price: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ nullable: true })
-    description: string;
+  @Column()
+  name: string;
 
-    @Column()
-    stock: number;
+  @Column('decimal')
+  price: number;
 
-    @Column({ nullable: true })
-    imageUrl: string;
+  @Column()
+  description: string;
 
-    @OneToMany(() => EventProduct, (eventProduct) => eventProduct.product)
-    eventProducts: EventProduct[];
+  @Column('int')
+  stock: number;
+
+  @Column()
+  imageUrl: string;
+
+  // Add ManyToOne relationship with Event
+  @ManyToOne(() => Event, event => event.products)
+  event: Event;
 }

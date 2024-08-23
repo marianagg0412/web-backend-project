@@ -1,4 +1,4 @@
-import { IsString, IsDate, IsOptional, IsArray, IsUrl } from 'class-validator';
+import { IsString, IsDate, IsOptional, IsArray, IsUrl, IsNumber } from 'class-validator';
 
 export class CreateEventDto {
     @IsString()
@@ -21,5 +21,6 @@ export class CreateEventDto {
 
     @IsOptional()
     @IsArray()
-    readonly models?: number[];  //ids of models
+    @IsNumber({}, { each: true })  // Ensures that each element is a number
+    readonly models?: number[];  // ids of models
 }

@@ -1,6 +1,6 @@
-import { EventModel } from 'src/eventxmodel/entities/eventxmodel.entity';
-import { Photo } from 'src/photos/entities/photo.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Photo } from '../../photos/entities/photo.entity';
+import { Event } from '../../events/entities/event.entity';
 
 @Entity({ name: 'model' })
 export class Model {
@@ -16,12 +16,14 @@ export class Model {
   @Column()
   bookingInfo: string;
 
-  @Column({ nullable: true })
+  @Column()
   photosUrl: string;
 
-  @OneToMany(() => EventModel, (eventModel) => eventModel.model)
-  eventModels: EventModel[];
+  // Add ManyToOne relationship with Event
+  @ManyToOne(() => Event, event => event.models)
+  event: Event;
 
-  @OneToMany(() => Photo, (photo) => photo.model)
+  // Add OneToMany relationship with Photo
+  @OneToMany(() => Photo, photo => photo.model)
   photos: Photo[];
 }

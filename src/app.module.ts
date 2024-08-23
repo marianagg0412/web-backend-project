@@ -10,10 +10,6 @@ import { UsersModule } from './users/users.module';
 import { PhotosModule } from './photos/photos.module';
 import { MembershipsModule } from './memberships/memberships.module';
 import { Logger } from '@nestjs/common';
-import { EventxmodelModule } from './eventxmodel/eventxmodel.module';
-import { EventxproductModule } from './eventxproduct/eventxproduct.module';
-import { UserxmembershipModule } from './userxmembership/userxmembership.module';
-import { UserxroleModule } from './userxrole/userxrole.module';
 import { RoleModule } from './role/role.module';
 
 @Module({
@@ -46,17 +42,12 @@ import { RoleModule } from './role/role.module';
       },
       inject: [],
     }),
-    // Uncomment these one by one to debug:
     ModelsModule,
     ProductsModule,
     EventsModule,
     UsersModule,
     PhotosModule,
     MembershipsModule,
-    EventxmodelModule,
-    EventxproductModule,
-    UserxmembershipModule,
-    UserxroleModule,
     RoleModule,
   ],
   controllers: [AppController],

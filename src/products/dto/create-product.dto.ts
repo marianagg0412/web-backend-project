@@ -1,19 +1,24 @@
-import { IsNumber, IsOptional, IsPositive, IsString, Min } from "class-validator";
+import { IsString, IsNumber, IsInt, IsUrl, IsPositive } from 'class-validator';
 
 export class CreateProductDto {
     @IsString()
     readonly name: string;
+
     @IsNumber()
     @IsPositive()
     readonly price: number;
+
     @IsString()
-    @IsOptional()
-    readonly description?: string;
-    @IsNumber()
-    @Min(0)
+    readonly description: string;
+
+    @IsInt()
+    @IsPositive()
     readonly stock: number;
-    @IsOptional()
-    @IsString()
-    readonly imagesUrl?: string;
-  }
-  
+
+    @IsUrl()
+    readonly imageUrl: string;
+
+    @IsInt()
+    @IsPositive()
+    readonly eventId: number;
+}

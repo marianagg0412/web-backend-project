@@ -1,16 +1,16 @@
-import { IsOptional, IsString } from "class-validator";
+import { IsString, IsOptional, IsUrl } from 'class-validator';
 
 export class CreateModelDto {
     @IsString()
     readonly name: string;
 
-    @IsString()
+    @IsUrl()
     readonly portfolioUrl: string;
 
     @IsString()
     readonly bookingInfo: string;
 
-    @IsString()
+    @IsUrl()
     @IsOptional()
     readonly photosUrl?: string;
 }

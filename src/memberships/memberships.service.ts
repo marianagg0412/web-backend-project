@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMembershipDto } from './dto/create-membership.dto';
 import { UpdateMembershipDto } from './dto/update-membership.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserMembership } from 'src/userxmembership/entities/userxmembership.entity';
 import { Repository } from 'typeorm';
 import { Membership } from './entities/membership.entity';
+import { User } from 'src/users/entities/user.entity';  // Import User entity
 
 @Injectable()
 export class MembershipsService {
@@ -12,8 +12,8 @@ export class MembershipsService {
     @InjectRepository(Membership)
     private readonly membershipRepository: Repository<Membership>,
 
-    @InjectRepository(UserMembership)
-    private readonly userMembershipRepository: Repository<UserMembership>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>, // Inject User repository
   ) {}
 
   async create(createMembershipDto: CreateMembershipDto): Promise<Membership> {
@@ -44,5 +44,29 @@ export class MembershipsService {
     if (result.affected === 0) {
       throw new NotFoundException('Membership not found');
     }
+  }
+
+  // Add a User to a Membership
+  async addUserToMembership(userId: number, membershipId: number): Promise<void> {
+    const user = await this.userRepository.findOne({ where: { id: userId }, relations: ['memberships'] });
+    const membership = await this.findOne(membershipId);
+
+    if (!user || !membership) {
+      throw new NotFoundException('User or Membership not found');
+    }
+
+    user.memberships.push(membership);
+    await this.userRepository.save(user);
+  }
+
+  // Remove a User from a Membership
+  async removeUserFromMembership(userId: number, membershipId: number): Promise<void> {
+    const user = await this.userRepository.findOne({ where: { id: userId }, relations: ['memberships'] });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.memberships = user.memberships.filter(m => m.id !== membershipId);
+    await this.userRepository.save(user);
   }
 }

@@ -1,7 +1,21 @@
+import { IsString, IsNumber, IsInt, IsPositive } from 'class-validator';
+
 export class CreatePhotoDto {
-    readonly photourl: string;
+    @IsString()
+    readonly photoUrl: string;
+
+    @IsInt()
+    @IsPositive()
     readonly eventId: number;
+
+    @IsInt()
+    @IsPositive()
     readonly modelId: number;
+
+    @IsNumber()
+    @IsPositive()
     readonly price: number;
-    readonly digitalorphysical: string;
-  }
+
+    @IsString()
+    readonly digitalOrPhysical: string;
+}

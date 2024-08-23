@@ -16,9 +16,9 @@ export class Photo {
   @Column()
   digitalorphysical: string;
 
-  @ManyToOne(() => Event, (event) => event.photos)
+  @ManyToOne(() => Event, event => event.photos)
   event: Event;
 
-  @ManyToOne(() => Model, (model) => model.photos)
+  @ManyToOne(() => Model, model => model.photos)
   model: Model;
 }

@@ -1,8 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
-import { UserMembership } from '../../userxmembership/entities/userxmembership.entity';
-import { UserRole } from '../../userxrole/entities/userxrole.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { Role } from '../../role/entities/role.entity';
-import { Event } from '../../events/entities/event.entity'; // Import the Event entity
+import { Event } from '../../events/entities/event.entity';
+import { Membership } from '../../memberships/entities/membership.entity';
 
 @Entity({ name: 'user' })
 export class User {
@@ -21,22 +20,28 @@ export class User {
   @Column()
   membershipstatus: string;
 
-  @Column()
-  roleId: number;
-
+  // Assuming this is for the main role of the user
   @ManyToOne(() => Role, (role) => role.users, { nullable: false })
   role: Role;
 
-  @OneToMany(() => UserMembership, (userMembership) => userMembership.user)
-  userMemberships: UserMembership[];
+  // Many-to-Many relationship with Membership
+  @ManyToMany(() => Membership, membership => membership.users)
+  @JoinTable({
+    name: 'userxmembership' // Join table for users and memberships
+  })
+  memberships: Membership[];
 
-  @OneToMany(() => UserRole, (userRole) => userRole.user)
-  userRoles: UserRole[];
+  // Many-to-Many relationship with Role
+  @ManyToMany(() => Role, role => role.users)
+  @JoinTable({
+    name: 'userxrole' // Join table for users and roles
+  })
+  roles: Role[];
 
-  // New Many-to-Many relationship with Event
+  // Many-to-Many relationship with Event
   @ManyToMany(() => Event, event => event.users)
   @JoinTable({
-    name: 'userxevent'
-  }) // This will create the join table to manage the relationship
+    name: 'userxevent' // Join table for users and events
+  })
   events: Event[];
 }

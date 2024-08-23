@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { UserMembership } from '../../userxmembership/entities/userxmembership.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
+import { User } from '../../users/entities/user.entity';
 
 @Entity({ name: 'membership' })
 export class Membership {
@@ -18,6 +18,7 @@ export class Membership {
   @Column()
   exclusivecontenturl: string;
 
-  @OneToMany(() => UserMembership, (userMembership) => userMembership.membership)
-  userMemberships: UserMembership[];
+  // Many-to-Many relationship with User
+  @ManyToMany(() => User, user => user.memberships)
+  users: User[];
 }

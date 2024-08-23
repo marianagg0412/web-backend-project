@@ -4,16 +4,28 @@ import { Repository } from 'typeorm';
 import { Event } from './entities/event.entity';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { Model } from 'src/models/entities/model.entity';
 
 @Injectable()
 export class EventsService {
   constructor(
     @InjectRepository(Event)
     private readonly eventRepository: Repository<Event>,
+    
+    @InjectRepository(Model)
+    private readonly modelRepository: Repository<Model>,
   ) {}
 
   async create(createEventDto: CreateEventDto): Promise<Event> {
-    const event = this.eventRepository.create(createEventDto);
+    const { models: modelIds, ...eventData } = createEventDto;
+
+    const models = await this.modelRepository.findByIds(modelIds || []);  // Fetch the models
+
+    const event = this.eventRepository.create({
+      ...eventData,
+      models,  // Attach the fetched model entities
+    });
+
     return this.eventRepository.save(event);
   }
 
@@ -30,7 +42,15 @@ export class EventsService {
   }
 
   async update(id: number, updateEventDto: UpdateEventDto): Promise<Event> {
-    await this.eventRepository.update(id, updateEventDto);
+    const { models: modelIds, ...eventData } = updateEventDto;
+
+    const models = await this.modelRepository.findByIds(modelIds || []);  // Fetch the models
+
+    await this.eventRepository.update(id, {
+      ...eventData,
+      models,  // Attach the fetched model entities
+    });
+
     return this.findOne(id);
   }
 
