@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsInt, IsUrl, IsPositive } from 'class-validator';
+import { IsString, IsNumber, IsInt, IsUrl, IsPositive, IsBoolean } from 'class-validator';
 
 export class CreateProductDto {
     @IsString()
@@ -21,4 +21,7 @@ export class CreateProductDto {
     @IsInt()
     @IsPositive()
     readonly eventId: number;
+
+    @IsInt()
+    readonly isLegal: number;
 }

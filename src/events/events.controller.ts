@@ -1,12 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, NotFoundException, UseGuards } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { AuthGuard } from 'src/Auth/AuthGuard';
+import { RolesGuard } from 'src/Auth/RolesGuard';
+import { Roles } from 'src/Auth/decorators/roles.decorator';
+import { JwtAuthGuard } from 'src/Auth/jwt-auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin')
   @Post()
   async create(@Body() createEventDto: CreateEventDto) {
     return this.eventsService.create(createEventDto);
@@ -27,11 +34,15 @@ export class EventsController {
     return event;
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin','Editor')
   @Patch(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateEventDto: UpdateEventDto) {
     return this.eventsService.update(+id, updateEventDto);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin')
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     await this.eventsService.remove(id);

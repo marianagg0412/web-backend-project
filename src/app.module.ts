@@ -11,10 +11,14 @@ import { PhotosModule } from './photos/photos.module';
 import { MembershipsModule } from './memberships/memberships.module';
 import { Logger } from '@nestjs/common';
 import { RoleModule } from './role/role.module';
+import { AuthModule } from './Auth/auth.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), // To load environment variables
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }), // To load environment variables
     TypeOrmModule.forRootAsync({
       useFactory: async () => {
         const host = process.env.DB_HOST;
@@ -49,6 +53,8 @@ import { RoleModule } from './role/role.module';
     PhotosModule,
     MembershipsModule,
     RoleModule,
+    AuthModule,
+    // CommonModule
   ],
   controllers: [AppController],
   providers: [AppService],

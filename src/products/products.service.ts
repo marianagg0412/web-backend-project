@@ -21,6 +21,10 @@ export class ProductsService {
     return await this.productRepository.find();
   }
 
+  async findAllLegal() {
+    return await this.productRepository.find({where: {isLegal: 1}});
+  }
+
   async findOne(id: number): Promise<Product> {
     const product = await this.productRepository.findOne({ where: { id } });
     if (!product) {

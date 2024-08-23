@@ -21,6 +21,9 @@ export class Product {
   @Column()
   imageUrl: string;
 
+  @Column('int')
+  isLegal: number;
+
   // Add ManyToOne relationship with Event
   @ManyToOne(() => Event, event => event.products)
   event: Event;

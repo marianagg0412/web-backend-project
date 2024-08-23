@@ -1,19 +1,22 @@
-import { IsString, IsEmail, IsOptional, IsNumber } from 'class-validator';
+import { IsString, IsEmail, IsOptional, ArrayNotEmpty, IsArray, IsInt } from 'class-validator';
 
 export class CreateUserDto {
-    @IsString()
-    readonly name: string;
+  @IsString()
+  readonly name: string;
 
-    @IsEmail()
-    readonly email: string;
+  @IsEmail()
+  readonly email: string;
 
-    @IsString()
-    readonly password: string;
+  @IsString()
+  readonly password: string;
 
-    @IsOptional()
-    @IsString()
-    readonly membershipstatus?: string;  // optional with a default value
+  @IsOptional()
+  @IsString()
+  readonly membershipstatus?: string;  
 
-    @IsNumber()
-    readonly roleId: number;
+  @IsOptional()
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsInt({ each: true })
+  readonly roleIds?: number[];
 }

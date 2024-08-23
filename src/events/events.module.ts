@@ -5,11 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
 import { ModelsModule } from 'src/models/models.module';
 import { User } from 'src/users/entities/user.entity';
+import { AuthModule } from 'src/Auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Event, User]),
-    ModelsModule, // Import ModelsModule here
+    ModelsModule
   ],
   controllers: [EventsController],
   providers: [EventsService],

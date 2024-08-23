@@ -11,18 +11,14 @@ export class User {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
   password: string;
 
-  @Column()
+  @Column({ nullable: true })
   membershipstatus: string;
-
-  // Assuming this is for the main role of the user
-  @ManyToOne(() => Role, (role) => role.users, { nullable: false })
-  role: Role;
 
   // Many-to-Many relationship with Membership
   @ManyToMany(() => Membership, membership => membership.users)

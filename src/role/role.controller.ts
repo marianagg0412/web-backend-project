@@ -1,9 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
+import { Roles } from 'src/Auth/decorators/roles.decorator';
+import { AuthGuard } from 'src/Auth/AuthGuard';
+import { RolesGuard } from 'src/Auth/RolesGuard';
+import { JwtAuthGuard } from 'src/Auth/jwt-auth.guard';
 
+@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles('Admin')
 @Controller('roles')  //plural for consistency
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
