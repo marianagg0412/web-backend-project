@@ -18,23 +18,27 @@ export class PhotosService {
     private readonly modelRepository: Repository<Model>,
   ) {}
 
-  async create(createPhotoDto: CreatePhotoDto): Promise<Photo> {
-    const { eventId, modelId } = createPhotoDto;
+async create(createPhotoDto: CreatePhotoDto): Promise<Photo> {
+  const { eventId, modelId, photoUrl, price, digitalOrPhysical } = createPhotoDto;
 
-    const event = await this.eventRepository.findOneBy({ id: eventId });
-    const model = await this.modelRepository.findOneBy({ id: modelId });
+  const event = await this.eventRepository.findOneBy({ id: eventId });
+  const model = await this.modelRepository.findOneBy({ id: modelId });
 
-    if (!event || !model) {
-      throw new NotFoundException('Event or Model not found');
-    }
-
-    const photo = this.photoRepository.create({
-      event,
-      model,
-    });
-
-    return this.photoRepository.save(photo);
+  if (!event || !model) {
+    throw new NotFoundException('Event or Model not found');
   }
+
+  const photo = this.photoRepository.create({
+    event,
+    model,
+    photourl: photoUrl,            // Include the photoUrl field
+    price,                         // Include the price field
+    digitalorphysical: digitalOrPhysical,  // Include the digitalOrPhysical field
+  });
+
+  return this.photoRepository.save(photo);
+}
+
 
   async findAll(): Promise<Photo[]> {
     return this.photoRepository.find();

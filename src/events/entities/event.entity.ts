@@ -21,7 +21,7 @@ export class Event {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ nullable: true })
   imagesUrl: string;
 
   @ManyToMany(() => User, user => user.events)

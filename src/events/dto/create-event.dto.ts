@@ -4,7 +4,7 @@ export class CreateEventDto {
     @IsString()
     readonly name: string;
 
-    @IsDate()
+    @IsString()
     readonly date: Date;
 
     @IsOptional()

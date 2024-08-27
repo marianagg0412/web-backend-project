@@ -12,7 +12,6 @@ import { MembershipsModule } from './memberships/memberships.module';
 import { Logger } from '@nestjs/common';
 import { RoleModule } from './role/role.module';
 import { AuthModule } from './Auth/auth.module';
-import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [

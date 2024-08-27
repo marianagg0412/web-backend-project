@@ -4,6 +4,7 @@ import { PhotosController } from './photos.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Photo } from './entities/photo.entity';
 import { Model } from 'src/models/entities/model.entity';
+import { Event } from 'src/events/entities/event.entity';
 
 @Module({
   imports: [
