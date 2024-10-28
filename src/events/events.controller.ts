@@ -19,6 +19,11 @@ export class EventsController {
     return this.eventsService.create(createEventDto);
   }
 
+  @Get(':id/models')
+  async getModelsForEvent(@Param('id') id: number) {
+    return this.eventsService.getModelsForEvent(id);
+  }
+
   @Get()
   async findAll() {
     return this.eventsService.findAll();

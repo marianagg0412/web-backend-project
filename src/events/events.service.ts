@@ -75,6 +75,17 @@ export class EventsService {
   
     return this.eventRepository.save(event);
   }
+
+  async getModelsForEvent(eventId: number) {
+    const event = await this.eventRepository.findOne({
+      where: { id: eventId },
+      relations: ['models'],  // Load related models
+    });
+    if (!event) {
+      throw new NotFoundException(`Event with id ${eventId} not found`);
+    }
+    return event.models;
+  }
   
 
   async remove(id: number): Promise<void> {

@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, OneToMany, JoinTable } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Product } from '../../products/entities/product.entity';
 import { Model } from '../../models/entities/model.entity';
@@ -30,7 +30,10 @@ export class Event {
   @OneToMany(() => Product, product => product.event)
   products: Product[];
 
-  @OneToMany(() => Model, model => model.event)
+  @ManyToMany(() => Model, model => model.events)
+  @JoinTable({
+    name: 'modelxevent' // Join table for users and events
+  })
   models: Model[];
 
   @OneToMany(() => Photo, photo => photo.event)

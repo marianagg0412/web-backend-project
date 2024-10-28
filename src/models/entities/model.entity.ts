@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinTable, ManyToMany } from 'typeorm';
 import { Photo } from '../../photos/entities/photo.entity';
 import { Event } from '../../events/entities/event.entity';
 
@@ -16,12 +16,11 @@ export class Model {
   @Column()
   bookingInfo: string;
 
-  @Column()
+  @Column({ nullable: true })
   photosUrl: string;
 
-  // Add ManyToOne relationship with Event
-  @ManyToOne(() => Event, event => event.models)
-  event: Event;
+  @ManyToMany(() => Event, event => event.users)
+  events: Event[];
 
   // Add OneToMany relationship with Photo
   @OneToMany(() => Photo, photo => photo.model)
