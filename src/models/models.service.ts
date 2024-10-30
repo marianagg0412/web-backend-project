@@ -17,9 +17,12 @@ export class ModelsService {
     return await this.modelRepository.save(model);
   }
 
-  async findAll(): Promise<Model[]> {
-    return await this.modelRepository.find();
+  async findAll(isActive: boolean): Promise<Model[]> {
+    return await this.modelRepository.find({
+      where: { isActive: isActive }, // Use the passed isActive value
+    });
   }
+  
 
   async findOne(id: number): Promise<Model> {
     const model = await this.modelRepository.findOne({where: {id}});
@@ -37,5 +40,6 @@ export class ModelsService {
 
   async remove(id: number) {
     await this.modelRepository.delete(id);
+    
   }
 }

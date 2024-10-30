@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards, Query } from '@nestjs/common';
 import { ModelsService } from './models.service';
 import { CreateModelDto } from './dto/create-model.dto';
 import { UpdateModelDto } from './dto/update-model.dto';
@@ -19,8 +19,9 @@ export class ModelsController {
   }
 
   @Get()
-  async findAll() {
-    return await this.modelsService.findAll();
+  async findAll(@Query('isActive') isActive: string) {
+    const isActiveBoolean = isActive === 'true'; // Convert query string to boolean
+    return this.modelsService.findAll(isActiveBoolean);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

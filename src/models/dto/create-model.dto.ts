@@ -13,4 +13,7 @@ export class CreateModelDto {
     @IsUrl()
     @IsOptional()
     readonly photosUrl?: string;
+
+    @IsOptional() // This makes it optional during creation
+    isActive?: boolean;
 }

@@ -19,7 +19,10 @@ export class Model {
   @Column({ nullable: true })
   photosUrl: string;
 
-  @ManyToMany(() => Event, event => event.users)
+  @Column({ default: true }) // Add this line
+  isActive: boolean;
+
+  @ManyToMany(() => Event, event => event.models)
   events: Event[];
 
   // Add OneToMany relationship with Photo

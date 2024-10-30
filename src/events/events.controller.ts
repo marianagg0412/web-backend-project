@@ -7,6 +7,7 @@ import { RolesGuard } from 'src/Auth/RolesGuard';
 import { Roles } from 'src/Auth/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/Auth/jwt-auth.guard';
 
+
 @Controller('events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
