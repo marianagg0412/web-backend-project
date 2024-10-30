@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 
@@ -21,22 +21,23 @@ export class AuthService {
   }
 
   async login(user: any): Promise<{ accessToken: string }> {
-    const userFromDb = await this.usersService.findOne(user.userId); // Ensure this fetches the correct user
-    
-    console.log(userFromDb);
+    // Use validateUser to find and validate user credentials
+    const userFromDb = await this.usersService.validateUser(user.email, user.password);
+
+    if (!userFromDb) {
+        throw new UnauthorizedException('Invalid email or password');
+    }
+
     const payload = {
-      username: userFromDb.email, // Make sure this is accurate
-      sub: userFromDb.id, // Ensure this matches your user ID
-      roles: userFromDb.roles.map(role => role.name), // Ensure role names are correctly mapped
+        username: userFromDb.email,
+        sub: userFromDb.id,
+        roles: userFromDb.roles.map(role => role.name),
     };
-    console.log("bbb");
-    console.log(payload);
-    console.log("cccc");
-    console.log(payload.roles);
-  
+
     return {
-      accessToken: this.jwtService.sign(payload),
+        accessToken: this.jwtService.sign(payload),
     };
-  }
+}
+
   
 }

@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 
@@ -28,10 +28,15 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   //cors
+//cors
   const configService = app.get(ConfigService);
   app.enableCors({
-    origin: configService.get('FRONT_URL'), 
+    origin: configService.get('FRONT_URL'),
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
   });
-  await app.listen(3000);
+
+  await app.listen(process.env.PORT);
+  Logger.log(`Server running on PORT ${process.env.PORT}`);
 }
 bootstrap();

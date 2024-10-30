@@ -8,7 +8,6 @@ import { Roles } from 'src/Auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/Auth/RolesGuard';
 import { JwtAuthGuard } from 'src/Auth/jwt-auth.guard';
 
-@UseGuards(AuthGuard)
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
@@ -27,7 +26,7 @@ export class ProductsController {
     return this.productsService.findAll();
   }
 
-  @Get()
+  @Get('legal')
   async findAllLegal(): Promise<Product[]> {
     return this.productsService.findAllLegal();
   }

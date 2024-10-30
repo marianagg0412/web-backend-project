@@ -7,7 +7,7 @@ import { Roles } from 'src/Auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/Auth/RolesGuard';
 import { JwtAuthGuard } from 'src/Auth/jwt-auth.guard';
 
-@UseGuards(AuthGuard)
+
 @Controller('photos')
 export class PhotosController {
   constructor(private readonly photosService: PhotosService) {}
@@ -24,6 +24,8 @@ export class PhotosController {
     return this.photosService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin','Editor')
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.photosService.findOne(id);

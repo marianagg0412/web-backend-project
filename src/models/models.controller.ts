@@ -7,7 +7,6 @@ import { RolesGuard } from 'src/Auth/RolesGuard';
 import { Roles } from 'src/Auth/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/Auth/jwt-auth.guard';
 
-@UseGuards(AuthGuard)
 @Controller('models')
 export class ModelsController {
   constructor(private readonly modelsService: ModelsService) {}
