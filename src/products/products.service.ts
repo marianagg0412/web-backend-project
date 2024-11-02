@@ -4,6 +4,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class ProductsService {
@@ -18,8 +19,10 @@ export class ProductsService {
   }
 
   async findAll(): Promise<Product[]> {
-    return await this.productRepository.find();
+    const products = await this.productRepository.find({ relations: ['event'] });
+    return plainToInstance(Product, products); // Transform the entities to plain objects
   }
+  
 
   async findAllLegal() {
     return await this.productRepository.find({where: {isLegal: 1}});
