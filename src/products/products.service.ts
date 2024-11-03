@@ -22,12 +22,7 @@ export class ProductsService {
 }
 
   async findAll(): Promise<Product[]> {
-    const products = await this.productRepository.find({where: {isActive: 1}});
-    // console.log('Products before return:', products);  // Log raw data
-    return products.map(product => ({
-      ...product,
-      price: Number(product.price)  // Ensure price is explicitly set as a number if necessary
-    }));
+    return await this.productRepository.find();
   }
   
 
