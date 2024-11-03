@@ -8,13 +8,22 @@ export class Photo {
   id: number;
 
   @Column()
-  photourl: string;
+  photoUrl: string;
 
-  @Column('decimal')
+  @Column({
+    type: 'decimal',
+    transformer: {
+      to: (value: number) => value,  // Store the value as-is
+      from: (value: string) => parseFloat(value)  // Convert from string to number
+    }
+  })
   price: number;
 
   @Column()
-  digitalorphysical: string;
+  digitalOrPhysical: string;
+
+  @Column('int', {default: 1})
+  isActive: number;
 
   @ManyToOne(() => Event, event => event.photos)
   event: Event;

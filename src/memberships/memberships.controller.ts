@@ -7,7 +7,7 @@ import { RolesGuard } from 'src/Auth/RolesGuard';
 import { Roles } from 'src/Auth/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/Auth/jwt-auth.guard';
 
-@UseGuards(AuthGuard)
+
 @Controller('memberships')
 export class MembershipsController {
   constructor(private readonly membershipsService: MembershipsService) {}
@@ -19,9 +19,16 @@ export class MembershipsController {
     return this.membershipsService.create(createMembershipDto);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin')
   @Get()
   findAll() {
     return this.membershipsService.findAll();
+  }
+
+  @Get('active')
+  findAllActive() {
+    return this.membershipsService.findAllActive();
   }
 
   @Get(':id')
@@ -36,8 +43,9 @@ export class MembershipsController {
     return this.membershipsService.update(id, updateMembershipDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Delete(':id')
+  @UseGuards(AuthGuard, JwtAuthGuard, RolesGuard)
+  @Roles('Admin')
+  @Patch(':id/deactivate')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.membershipsService.remove(id);
   }

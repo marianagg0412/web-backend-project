@@ -12,14 +12,14 @@ import { JwtAuthGuard } from 'src/Auth/jwt-auth.guard';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, JwtAuthGuard, RolesGuard)
   @Roles('Admin')
   @Post()
   async create(@Body() createProductDto: CreateProductDto): Promise<Product> {
     return this.productsService.create(createProductDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, JwtAuthGuard, RolesGuard)
   @Roles('Admin','VIP')
   @Get()
   async findAll(): Promise<Product[]> {
@@ -31,23 +31,23 @@ export class ProductsController {
     return this.productsService.findAllLegal();
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, JwtAuthGuard, RolesGuard)
   @Roles('Admin','VIP')
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Product> {
     return this.productsService.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, JwtAuthGuard, RolesGuard)
   @Roles('Admin')
   @Patch(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateProductDto: UpdateProductDto): Promise<Product> {
     return this.productsService.update(id, updateProductDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, JwtAuthGuard, RolesGuard)
   @Roles('Admin')
-  @Delete(':id')
+  @Patch(':id/inactivate')
   async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.productsService.remove(id);
   }

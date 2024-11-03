@@ -24,6 +24,11 @@ export class EventsController {
     return this.eventsService.getModelsForEvent(id);
   }
 
+  @Get(':id/products')
+  async getProductsForEvent(@Param('id') id: number) {
+    return this.eventsService.getProductsForEvent(id);
+  }
+
   @Get()
   async findAll() {
     return this.eventsService.findAll();
@@ -48,7 +53,7 @@ export class EventsController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('Admin')
-  @Delete(':id')
+  @Patch(':id/deactivate')
   async remove(@Param('id', ParseIntPipe) id: number) {
     await this.eventsService.remove(id);
     return { message: 'Event successfully deleted' };

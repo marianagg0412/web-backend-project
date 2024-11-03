@@ -25,6 +25,10 @@ export class MembershipsService {
     return this.membershipRepository.find();
   }
 
+  findAllActive(): Promise<Membership[]> {
+    return this.membershipRepository.find({ where: { isActive: 1 } });
+  }
+
   async findOne(id: number): Promise<Membership> {
     const membership = await this.membershipRepository.findOne({ where: { id } });
     if (!membership) {
@@ -40,11 +44,15 @@ export class MembershipsService {
   }
 
   async remove(id: number): Promise<void> {
-    const result = await this.membershipRepository.delete(id);
-    if (result.affected === 0) {
+    const result = await this.membershipRepository.findOne({ where: { id } });
+    if (!result) {
       throw new NotFoundException('Membership not found');
     }
+    result.isActive = 0;
+    await this.membershipRepository.save(result);
   }
+
+
 
   // Add a User to a Membership
   async addUserToMembership(userId: number, membershipId: number): Promise<void> {

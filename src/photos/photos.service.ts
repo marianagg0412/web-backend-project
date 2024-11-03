@@ -31,9 +31,9 @@ async create(createPhotoDto: CreatePhotoDto): Promise<Photo> {
   const photo = this.photoRepository.create({
     event,
     model,
-    photourl: photoUrl,            // Include the photoUrl field
+    photoUrl: photoUrl,            // Include the photoUrl field
     price,                         // Include the price field
-    digitalorphysical: digitalOrPhysical,  // Include the digitalOrPhysical field
+    digitalOrPhysical: digitalOrPhysical,  // Include the digitalOrPhysical field
   });
 
   return this.photoRepository.save(photo);
@@ -41,7 +41,9 @@ async create(createPhotoDto: CreatePhotoDto): Promise<Photo> {
 
 
   async findAll(): Promise<Photo[]> {
-    return this.photoRepository.find();
+    return this.photoRepository.find({
+      relations: ['event', 'model'],
+    });
   }
 
   async findOne(id: number): Promise<Photo> {
@@ -53,23 +55,41 @@ async create(createPhotoDto: CreatePhotoDto): Promise<Photo> {
   }
 
   async update(id: number, updatePhotoDto: UpdatePhotoDto): Promise<Photo> {
-    const photo = await this.photoRepository.preload({
-      id,
-      ...updatePhotoDto,
-    });
-
+    const photo = await this.photoRepository.findOneBy({ id });
+  
     if (!photo) {
       throw new NotFoundException('Photo not found');
     }
-
+  
+    if (updatePhotoDto.eventId) {
+      const event = await this.eventRepository.findOneBy({ id: updatePhotoDto.eventId });
+      if (!event) {
+        throw new NotFoundException('Event not found');
+      }
+      photo.event = event;
+    }
+  
+    if (updatePhotoDto.modelId) {
+      const model = await this.modelRepository.findOneBy({ id: updatePhotoDto.modelId });
+      if (!model) {
+        throw new NotFoundException('Model not found');
+      }
+      photo.model = model;
+    }
+  
+    Object.assign(photo, updatePhotoDto); // Update other fields if provided
+  
     return this.photoRepository.save(photo);
   }
+  
 
   async remove(id: number): Promise<void> {
-    const result = await this.photoRepository.delete(id);
+    const result = await this.photoRepository.findOne({where: { id }});
 
-    if (result.affected === 0) {
+    if(!result) {
       throw new NotFoundException('Photo not found');
     }
+    result.isActive = 0;
+    await this.photoRepository.save(result);
   }
 }

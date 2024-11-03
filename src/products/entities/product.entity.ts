@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Event } from '../../events/entities/event.entity';
+import { IsNumber, IsString } from 'class-validator';
 
 @Entity({ name: 'product' })
 export class Product {
@@ -9,8 +10,17 @@ export class Product {
   @Column()
   name: string;
 
-  @Column('decimal')
+  @Column({
+    type: 'decimal',
+    transformer: {
+      to: (value: number) => value,  // Store the value as-is
+      from: (value: string) => parseFloat(value)  // Convert from string to number
+    }
+  })
   price: number;
+
+  @Column({default: 'General'})
+  category: string;
 
   @Column()
   description: string;
@@ -21,10 +31,15 @@ export class Product {
   @Column()
   imageUrl: string;
 
-  @Column('int')
+  @Column('int', { default: 1})
   isLegal: number;
 
-  // Add ManyToOne relationship with Event
+  @Column('int', {default: 1})
+  isActive: number;
+
+  @Column({ name: 'eventId', nullable: true })
+  eventId: number;
+
   @ManyToOne(() => Event, event => event.products)
   event: Event;
 }

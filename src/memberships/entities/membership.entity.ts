@@ -12,11 +12,20 @@ export class Membership {
   @Column()
   benefits: string;
 
-  @Column('decimal')
+  @Column({
+    type: 'decimal',
+    transformer: {
+      to: (value: number) => value,  // Store the value as-is
+      from: (value: string) => parseFloat(value)  // Convert from string to number
+    }
+  })
   price: number;
 
   @Column()
   exclusivecontenturl: string;
+
+  @Column({ default: 1})
+  isActive: number;
 
   // Many-to-Many relationship with User
   @ManyToMany(() => User, user => user.memberships)

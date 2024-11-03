@@ -20,6 +20,10 @@ export class CreateEventDto {
     readonly imagesUrl?: string;
 
     @IsOptional()
+    @IsNumber()
+    readonly isActive?: number;
+
+    @IsOptional()
     @IsArray()
     @IsNumber({}, { each: true })  // Ensures that each element is a number
     readonly models?: number[];  // ids of models

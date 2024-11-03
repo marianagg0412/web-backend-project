@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsUrl } from 'class-validator';
+import { IsString, IsNumber, IsUrl, IsOptional } from 'class-validator';
 
 export class CreateMembershipDto {
     @IsString()
@@ -12,4 +12,8 @@ export class CreateMembershipDto {
 
     @IsUrl()
     readonly exclusivecontenturl: string;
+
+    @IsNumber()
+    @IsOptional()
+    readonly isActive: number;
 }

@@ -24,6 +24,9 @@ export class Event {
   @Column({ nullable: true })
   imagesUrl: string;
 
+  @Column('int', {default: 1})
+  isActive: number;
+
   @ManyToMany(() => User, user => user.events)
   users: User[];
 

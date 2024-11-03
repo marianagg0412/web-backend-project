@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsInt, IsPositive } from 'class-validator';
+import { IsString, IsNumber, IsInt, IsPositive, IsOptional } from 'class-validator';
 
 export class CreatePhotoDto {
     @IsString()
@@ -15,6 +15,10 @@ export class CreatePhotoDto {
     @IsNumber()
     @IsPositive()
     readonly price: number;
+
+    @IsOptional()
+    @IsInt()
+    readonly isActive: number;
 
     @IsString()
     readonly digitalOrPhysical: string;

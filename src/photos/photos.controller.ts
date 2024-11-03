@@ -40,7 +40,7 @@ export class PhotosController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('Admin')
-  @Delete(':id')
+  @Patch(':id/deactivate')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.photosService.remove(id);
   }
